@@ -11,8 +11,8 @@ def rm_missing_values(values: list) -> list:
     Removes missing values from a list
     """
     values_np = np.array(values)
-    mask = np.logical_and(
-        np.logical_and(values_np is None, values_np == ""), values_np == "nan"
+    mask = np.logical_or(
+        np.logical_or(values_np == None, values_np == ""), values_np == "nan"
     )
     return values_np[np.logical_not(mask)].tolist()
 
@@ -22,10 +22,11 @@ def fill_missing_values(values: list, filler: int = 0) -> list:
     Fills missing values from a list
     """
     values_np = np.array(values)
-    mask = np.logical_and(
-        np.logical_and(values_np is None, values_np == ""), values_np == "nan"
+    mask = np.logical_or(
+        np.logical_or(values_np == None, values_np == ""), values_np == "nan"
     )
     values_np[mask] = filler
+    print(mask, values_np is None, values_np == "", values_np == "nan")
     return values_np.tolist()
 
 

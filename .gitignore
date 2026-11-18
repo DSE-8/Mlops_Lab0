@@ -9,3 +9,6 @@ venv/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Tests
+.coverage
