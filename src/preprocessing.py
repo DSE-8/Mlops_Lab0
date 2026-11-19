@@ -100,7 +100,7 @@ def select_alphanumerical(text: str) -> str:
     """
     Deletes non-alphanumerical characters of a text
     """
-    text = re.sub(r"[^0-9a-z\s]", "", text)
+    text = re.sub(r"[^0-9a-zA-Z\s]", "", text)
     return text
 
 

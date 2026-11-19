@@ -10,20 +10,18 @@ import numpy as np
 def num_values():
     return [1, 2, 3, 4]
 
-# @pytest.mark.parametrize("a, b, expected", [
-#     (1, 2, 3),
-#     (5, 5, 10),
-#     (-1, 1, 0),
-# ])
 def test_rm_missing_values_with_none_missing(num_values):
     ret_values = preprocessing.rm_missing_values(num_values)
     assert ret_values == num_values
 
-def test_rm_missing_values_with_some_missing(num_values):
-    values = [str(v) for v in num_values]
-    values.append("")
+@pytest.mark.parametrize("values, expected", [
+    (["1", None, None, "4"], ["1", "4"]),
+    (["", "2", "3", ""], ["2", "3"]),
+    (["1", "2", None, ""], ["1", "2"]),
+])
+def test_rm_missing_values_with_some_missing(values, expected):
     ret_values = preprocessing.rm_missing_values(values)
-    assert ret_values == values[:-1]
+    assert ret_values == expected
     
 def test_fill_missing_values_with_none_missing(num_values):
     ret_values = preprocessing.fill_missing_values(num_values)
@@ -32,9 +30,10 @@ def test_fill_missing_values_with_none_missing(num_values):
 def test_fill_missing_values_with_some_missing(num_values):
     values = [str(v) for v in num_values]
     values.append("")
-    expected = values.copy()
+    expected = values[:-1].copy()
+    expected.append("0")
     ret_values = preprocessing.fill_missing_values(values)
-    assert ret_values == values[:-1]
+    assert ret_values == expected
     
 def test_rm_duplicated_values_with_none_duplicated(num_values):
     ret_values = preprocessing.rm_duplicated_values(num_values)
@@ -52,7 +51,7 @@ def test_min_max_normalization(num_values):
 
 def test_standarization(num_values):
     ret_values = preprocessing.standarization(num_values)
-    assert ret_values == num_values
+    assert ret_values == pytest.approx([-1.34164079, -0.4472136, 0.4472136, 1.34164079])
 
 @pytest.mark.parametrize("min_v, max_v, expected", [
     (2, 3, [2, 2, 3, 3]),
@@ -76,15 +75,18 @@ def test_log_scale(num_values):
 
 
 def test_tokenize():
-    pass
+    ret_values = preprocessing.tokenize("Str That Needs To Be Tokenized!")
+    assert ret_values == "strthatneedstobetokenized"
 
 
 def test_select_alphanumerical():
-    pass
+    ret_values = preprocessing.select_alphanumerical("Str with **many!** symbols & characters?")
+    assert ret_values == "Str with many symbols  characters"
 
 
 def test_rm_stopwords():
-    pass
+    ret_values = preprocessing.rm_stopwords("string of the stopwords to remove", ["of","a","the","to"])
+    assert ret_values == "string stopwords remove"
 
 
 def test_flatten():
