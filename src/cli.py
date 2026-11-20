@@ -75,6 +75,7 @@ def normalization(values, min_value, max_value):
 
     >> normalization 0 1 2 --min_value 0 --max_value 1
     """
+    values = [float(v) for v in values]
     values_preprocessed = preprocessing.min_max_normalization(
         values, min_value, max_value
     )
@@ -89,6 +90,7 @@ def standarization(values):
 
     >> standarization 0 1 2
     """
+    values = [float(v) for v in values]
     values_preprocessed = preprocessing.standarization(values)
     print(values_preprocessed)
 
@@ -117,7 +119,9 @@ def clip(values, min_value, max_value):
 
     >> clip 0 1 2 --min_value 0 --max_value 1
     """
-    values_preprocessed = preprocessing.clip_values(values, min_value, max_value)
+    values_preprocessed = preprocessing.clip_values(
+        [float(v) for v in values], min_value, max_value
+    )
     print(values_preprocessed)
 
 
@@ -141,6 +145,7 @@ def log_scale(values):
 
     >> log_scale 0 1 2
     """
+    values = [float(v) for v in values]
     values_preprocessed = preprocessing.log_scale(values)
     print(values_preprocessed)
 
@@ -202,14 +207,19 @@ def struct():
 
 
 @struct.command("flatten")
-@click.argument("values", nargs=-1, required=True, help="List with values.")
+@click.argument(
+    "values",
+    nargs=-1,
+    required=True,
+    help="List with values (comma-separated for sublists).",
+)
 def flatten(values):
     """
     Flattens a list of lists
 
-    >> flatten [a b] [c d]
+    >> flatten "a,b" "c,d"
     """
-    values_preprocessed = preprocessing.flatten(values)
+    values_preprocessed = preprocessing.flatten([v.split(",") for v in values])
     print(values_preprocessed)
 
 

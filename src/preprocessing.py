@@ -12,7 +12,7 @@ def rm_missing_values(values: list) -> list:
     """
     values_np = np.array(values)
     mask = np.logical_or(
-        np.logical_or(values_np == None, values_np == ""), values_np == "nan"
+        np.logical_or(np.equal(values_np, None), values_np == ""), values_np == "nan"
     )
     return values_np[np.logical_not(mask)].tolist()
 
@@ -23,7 +23,7 @@ def fill_missing_values(values: list, filler: int = 0) -> list:
     """
     values_np = np.array(values)
     mask = np.logical_or(
-        np.logical_or(values_np == None, values_np == ""), values_np == "nan"
+        np.logical_or(np.equal(values_np, None), values_np == ""), values_np == "nan"
     )
     values_np[mask] = filler
     print(mask, values_np is None, values_np == "", values_np == "nan")
